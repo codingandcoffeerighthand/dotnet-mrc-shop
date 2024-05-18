@@ -1,0 +1,29 @@
+@HostAddress = https://localhost:5050
+
+### Create a product
+
+POST  {{HostAddress}}/products
+Content-Type: application/json
+
+{
+  "name": "string",
+  "description": "string",
+  "imageFile": "string",
+  "category": [
+    "string"
+  ],
+  "price": 0
+}
+
+### Get all products
+
+GET {{HostAddress}}/products
+Accept-Encoding: application/json
+
+
+### Get product by id
+
+@product_id = 018f89ac-90eb-4573-ade0-4534c296ef83 
+
+GET {{HostAddress}}/products/{{product_id}}
+Accept-Encoding: application/json
