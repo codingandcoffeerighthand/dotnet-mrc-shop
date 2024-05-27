@@ -6,3 +6,4 @@ global using FluentValidation;
 global using Catalog.API.Models;
 global using Catalog.API.Exceptions;
 global using Shared.CQRS;
+global using Shared.Exceptions;

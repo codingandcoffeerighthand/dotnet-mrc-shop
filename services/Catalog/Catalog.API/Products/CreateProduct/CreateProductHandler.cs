@@ -10,11 +10,21 @@ public sealed record CreateProductCommand(
 
 public sealed record CreateProductResult(Guid Id);
 
-public sealed class CreateProductHandler(IDocumentSession session) : ICommandHandler<CreateProductCommand, CreateProductResult>
+public sealed class CreateProductValidator : AbstractValidator<CreateProductCommand>
+{
+    public CreateProductValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty();
+        RuleFor(x => x.Price).GreaterThanOrEqualTo(0);
+    }
+}
+
+public sealed class CreateProductHandler(
+    IDocumentSession session
+    ) : ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        await Task.Delay(10, cancellationToken);
         Product product = new()
         {
             Name = request.Name,

@@ -5,6 +5,7 @@
 
 # dotenv files
 .env
+task.md
 
 # User-specific files
 *.rsuser

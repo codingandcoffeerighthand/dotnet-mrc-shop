@@ -6,6 +6,18 @@ public sealed record UpdateProductCommand(
     string? Name, string? Description, string? ImageFile, decimal? Price, List<string>? Category
 ) : ICommand<UpdateProductResult>;
 public sealed record UpdateProductResult(bool IsSuccess);
+
+public sealed class UpdateProductValidator : AbstractValidator<UpdateProductCommand>
+{
+    public UpdateProductValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty().WithMessage("Id is required");
+        // rule for price if price not null
+        RuleFor(x => x.Price)
+            .NotEmpty().GreaterThanOrEqualTo(0)
+            .When(x => x.Price != null);
+    }
+}
 public class UpdateProductHandler(IDocumentSession session) : ICommandHandler<UpdateProductCommand, UpdateProductResult>
 {
     public async Task<UpdateProductResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)

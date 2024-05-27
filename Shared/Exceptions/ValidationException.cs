@@ -1,7 +1,6 @@
 using FluentValidation.Results;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
-namespace Catalog.API.Exceptions;
+namespace Shared.Exceptions;
 
 public class ValidationException() : Exception("One or more validation failures have occurred.")
 {

@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Diagnostics;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using ValidationException = Shared.Exceptions.ValidationException;
 
 namespace Catalog.API.Exceptions;
 
@@ -12,10 +12,12 @@ public sealed class ExceptionHandleMiddleware
     public ExceptionHandleMiddleware(RequestDelegate next)
     {
         _exceptionHandlers = new() {
-            {typeof(ValidationException), HandleValidationException},
+            {typeof(Shared.Exceptions.ValidationException), HandleValidationException},
             {typeof(NotFoundException), HandleNotFoundException},
             {typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException},
-            {typeof(ForbiddenAccessException), HandleForbiddenAccessException}
+            {typeof(ForbiddenAccessException), HandleForbiddenAccessException},
+            {typeof(JsonException), HandleJsonException},
+            {typeof(BadHttpRequestException), HandleBadRequestException},
         };
         _next = next;
     }
@@ -44,6 +46,28 @@ public sealed class ExceptionHandleMiddleware
             await HandleInternalServerErrorException(httpContext, exception);
             return;
         }
+    }
+
+    private async Task HandleJsonException(HttpContext httpContext, Exception ex)
+    {
+        httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+        await httpContext.Response.WriteAsJsonAsync(new ProblemDetails
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+            Detail = ex.Message
+        });
+    }
+
+    private async Task HandleBadRequestException(HttpContext httpContext, Exception ex)
+    {
+        httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+        await httpContext.Response.WriteAsJsonAsync(new ProblemDetails
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+            Detail = ex.Message
+        });
     }
 
     private async Task HandleValidationException(HttpContext httpContext, Exception ex)
