@@ -17,6 +17,8 @@ builder.Services.AddMarten(opts =>
     opts.Connection(builder.Configuration.GetConnectionString("Database")!);
 }).UseLightweightSessions();
 
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,11 +27,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseMiddleware<ExceptionHandleMiddleware>();
+
 
 app.MapCarter();
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler(opts => { });
 
 app.Run();
 

@@ -1,3 +1,3 @@
-namespace Catalog.API.Exceptions;
+namespace Shared.Exceptions;
 
 public class ForbiddenAccessException : Exception { }

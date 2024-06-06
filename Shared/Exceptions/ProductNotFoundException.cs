@@ -1,3 +1,3 @@
-namespace Catalog.API.Exceptions;
+namespace Shared.Exceptions;
 
 public sealed class ProductNotFoundException() : NotFoundException("product not found") { };
