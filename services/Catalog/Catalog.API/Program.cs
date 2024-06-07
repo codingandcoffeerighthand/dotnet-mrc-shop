@@ -10,6 +10,7 @@ builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
     cfg.AddOpenBehavior(typeof(Shared.Behaviors.ValidationBehavior<,>));
+    cfg.AddOpenBehavior(typeof(Shared.Behaviors.LoggingBehavior<,>));
 });
 
 builder.Services.AddMarten(opts =>
