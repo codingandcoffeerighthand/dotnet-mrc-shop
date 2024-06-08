@@ -7,17 +7,18 @@ EXPOSE 8080
 EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
+ARG BUILD_CONFIGURATION= ASPNETCORE_ENVIRONMENT
 WORKDIR /src
-COPY ["Catalog.API.csproj", "."]
-RUN dotnet restore "./Catalog.API.csproj"
+COPY ["services/Catalog/Catalog.API/Catalog.API.csproj", "services/Catalog/Catalog.API/"]
+COPY ["Shared/Shared.csproj", "Shared/"]
+RUN dotnet restore "./services/Catalog/Catalog.API/Catalog.API.csproj"
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "./Catalog.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/services/Catalog/Catalog.API"
+RUN dotnet build "./Catalog.API.csproj" -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Catalog.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Catalog.API.csproj"  -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

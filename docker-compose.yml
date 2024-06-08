@@ -14,5 +14,25 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  catalog.api:
+    image: dotnet-mrc-shop-catalog-api
+    depends_on:
+      - pgdata
+    build:
+      context: .
+      dockerfile: services/Catalog/Catalog.API/Dockerfile
+    ports:
+      - "6000:8080"
+      - "6060:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Server=pgdata;Port=5432;Database=CatalogDB;User Id=postgres;Password=postgres;
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro
+
 volumes:
   pgdata:
