@@ -59,6 +59,7 @@ services:
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Server=pgdata;Port=5432;Database=CatalogDB;User Id=postgres;Password=postgres;
       - ConnectionStrings__Redis=redis_cache:6379
+      - ConnectionStrings__DiscountGrpc=https://discount.grpc:8081
       - ASPNETCORE_Kestrel__Certificates__Default__Password=password
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     volumes:
