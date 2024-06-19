@@ -12,7 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services
-    .AddAppServices()
+    .AddAppServices(builder.Configuration)
     .AddInfrasServices(builder.Configuration)
     .AddApiService();
 
@@ -29,10 +29,6 @@ if (app.Environment.IsDevelopment())
     await app.InitializeDatabaseAsync();
 }
 app.UseApiService();
-app.UseHealthChecks("/health", new HealthCheckOptions
-{
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
 app.UseHttpsRedirection();
 
 

@@ -20,6 +20,17 @@ services:
     restart: always
     ports:
       - '6379:6379'
+  
+  messagebroker:
+    container_name: messagebroker
+    image: rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    restart: always
 
   catalog.api:
     container_name: catalog.api
@@ -61,6 +72,9 @@ services:
       - ConnectionStrings__Database=Server=pgdata;Port=5432;Database=CatalogDB;User Id=postgres;Password=postgres;
       - ConnectionStrings__Redis=redis_cache:6379
       - ConnectionStrings__DiscountGrpc=https://discount.grpc:8081
+      - MessageBroker__Host=amqp://messagebroker:5672
+      - MessageBroker__User=guest
+      - MessageBroker__Password=guest
       - ASPNETCORE_Kestrel__Certificates__Default__Password=password
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     volumes:
@@ -87,5 +101,31 @@ services:
     volumes:
       - ~/.aspnet/https:/https:ro
 
+  order.api:
+    container_name: order.api
+    image: dotnet-mrc-shop-order-api
+    depends_on:
+      - pgdata
+      - redis_cache
+    build:
+      context: .
+      dockerfile: services/Order/Order.API/Dockerfile
+    ports:
+      - "6003:8080"
+      - "6063:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Server=pgdata;Port=5432;Database=OrderDB;User Id=postgres;Password=postgres;
+      - ConnectionStrings__Redis=redis_cache:6379
+      - ConnectionStrings__DiscountGrpc=https://discount.grpc:8081
+      - MessageBroker__Host=amqp://messagebroker:5672
+      - MessageBroker__User=guest
+      - MessageBroker__Password=guest
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro
 volumes:
   pgdata:

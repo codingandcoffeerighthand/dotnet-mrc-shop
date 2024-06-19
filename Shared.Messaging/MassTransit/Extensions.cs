@@ -11,7 +11,7 @@ public static class Extensions
     public static IServiceCollection AddMessageBroker(
         this IServiceCollection services,
         IConfiguration config,
-        Assembly? assembly
+        Assembly? assembly = null
         )
     {
         services.AddMassTransit(cfg =>

@@ -1,6 +1,6 @@
-namespace Shared.Messaging.Events;
+namespace Basket.API.Dtos;
 
-public record BacketCheckoutEvent : IntergrationEvent
+public class BasketCheckoutDto
 {
     public string UserName { get; set; } = default!;
     public Guid CustomerId { get; set; } = default!;
@@ -10,14 +10,11 @@ public record BacketCheckoutEvent : IntergrationEvent
     public string EmailAddress { get; set; } = default!;
     public string AddressLine { get; set; } = default!;
     public string Contrry { get; set; } = default!;
-    public string Street { get; set; } = default!;
-    public string City { get; set; } = default!;
     public string State { get; set; } = default!;
     public string ZipCode { get; set; } = default!;
     public string CardName { get; set; } = default!;
     public string CardNumber { get; set; } = default!;
-    public string CardHolderName { get; set; } = default!;
     public string Expiration { get; set; } = default!;
     public string CVV { get; set; } = default!;
-    public int PaymentMethod { get; set; } = default!;
+    public string PaymentMethod { get; set; } = default!;
 }

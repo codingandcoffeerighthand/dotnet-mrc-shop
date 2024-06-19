@@ -8,3 +8,5 @@ public interface IDomainEvent : INotification
     public DateTimeOffset? OccurredOn => DateTime.Now;
     public string EventType => GetType().AssemblyQualifiedName!;
 }
+
+public interface IDomainEventHandler<TEvent> : INotificationHandler<TEvent> where TEvent : IDomainEvent { }
