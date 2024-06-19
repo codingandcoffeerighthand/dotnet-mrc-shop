@@ -1,6 +1,17 @@
-# dotnet-mrc-shop
-eShop: ASP.NET 8 mircoservice
+# dotnet-mrc-shop: Modern Microservice eShop
 
-# Catelog
+This project showcases a lightweight and scalable eShop architecture built with ASP.NET 8 microservices. It prioritizes performance, adaptability, and maintainability.
 
-- database: should be nonsql database(MongoDB). But i will use PostgreSQL (json column feature) and Marten because in project i use Postgres is primary database (i run it on docker and i don't want have to run may docker). So now, i can have ACID of sql and performance of nonSQL.
+## Technology Stack
+
+* **Database:**
+    - **Postgres:** Reliable and feature-rich database for core eShop functionalities.
+    - **Marten:** Enables NoSQL-like interactions with Postgres for simplified data access.
+    - **Outbox Pattern:** Ensures data consistency across services with asynchronous operations.
+* **Cache:** **Redis** 
+* **Message Broker:** **RabbitMQ** 
+* **Docker compose**
+
+## Todo
+
+- [❌] Integrate YARP (Reverse Proxy & API Gateway)
